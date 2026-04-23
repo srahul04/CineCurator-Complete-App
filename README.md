@@ -1,67 +1,54 @@
-# 🎬 CineCurator — The Ultimate Real-Time Movie Experience
+# 🎬 CineCurator — Real-Time Movie Booking App
 
-**CineCurator** is a high-fidelity, production-ready mobile application prototype built with **Expo** and **React Native**. It transforms the movie-going experience by integrating real-time global movie metadata, authentic cinematic posters, and live YouTube trailers into a premium, gold-standard UI.
-
----
-
-## 🌟 Premium Features
-
-### 🔐 Secure Auth-First Architecture
-*   **Gatekeeper Entry**: The app starts with a secure login flow, ensuring a membership-only feel.
-*   **Test Credentials**: 
-    *   **Email**: `test123@gmail.com`
-    *   **Password**: `test123`
-
-### 📡 Absolute Real-Time Ecosystem
-*   **Trakt.tv Metadata**: Real-time trending, popular, and anticipated movie data from global databases.
-*   **TVmaze Dynamic Posters**: Every movie banner is fetched live using an intelligent search system—no more stock placeholders.
-*   **YouTube Search Trailers**: Uses the **YouTube Data API v3** to search for and play official trailers instantly.
-*   **Live Mapping**: Automated categorization of movies into **IMAX**, **Premiere**, and **Indie** based on real-time metadata.
-
-### 🛡️ Smart Navigation & UX
-*   **Navigation Guard**: A custom-built interceptor for back-gestures that prevents redundant history loops and provides a smart "Exit or Home" popup.
-*   **End-to-End Booking**: A seamless flow from city selection to seat booking, culminating in a dynamic digital ticket.
-*   **Upcoming Explorer**: A dedicated grid view for future blockbusters with live release tracking.
-
-### 💎 Loyalty & Social
-*   **CineGold System**: A branded, animated loyalty card with real-time stat tracking (Movies watched, upcoming bookings).
-*   **Native Sharing**: Invite friends to your movies directly via native OS share sheets.
+CineCurator is a premium mobile app built for movie lovers who want a smooth, real-time experience. From finding trending blockbusters to picking the perfect seat, everything is designed to be fast, intuitive, and visually stunning.
 
 ---
 
-## 🛠️ Technology Stack
-*   **Framework**: Expo (React Native)
-*   **Navigation**: Expo Router (File-based)
-*   **API Client**: Axios with interceptors for secure header management.
-*   **Services**: Trakt.tv API, YouTube Data API v3, TVmaze API.
-*   **Theme**: Custom Vanilla CSS Design System (Premium Maroon & Gold).
+## 📱 App Walkthrough
+
+### 🔐 1. Start with Security
+The app kicks off with a clean, branded login screen. It’s not just about looks—it ensures every booking is tied to a real account. You can use the test credentials `test123@gmail.com` / `test123` to get in instantly.
+
+![Login Screen](./assets/screenshots/0.jpeg)
+
+### 🌍 2. Pick Your City
+Once you're in, you choose your location. We’ve also added a "Coming Soon" section here that pulls actual anticipated movies from global databases so you’re always ahead of the curve.
+
+![City Selection](./assets/screenshots/1.jpeg)
+
+### 🎭 3. Explore the Latest Hits
+The main explorer pulls trending movies in real-time. We’ve built smart filters for **IMAX**, **Premiere**, and **Indie** films that update automatically based on what's hot right now. No more generic stock images—every poster you see is the real deal.
+
+![Movie Explorer](./assets/screenshots/2.jpeg)
+
+### 🎥 4. Deep Dive & Trailers
+Found something you like? Tapping a movie gives you the full scoop—ratings, runtimes, and a real-time plot summary. You can even watch the official trailer directly via the YouTube integration.
+
+![Movie Details](./assets/screenshots/3.1.jpeg)
+![Trailer Integration](./assets/screenshots/3.2.jpeg)
+
+### 🎟️ 5. Grab Your Seats
+The booking flow is surgical. Pick your date, choose your showtime, and select your seats on a high-fidelity map. We’ve even added a "Navigation Guard" so you don’t accidentally close the app while you're picking your spot.
+
+![Seat Selection](./assets/screenshots/4.jpeg)
+
+### 🏆 6. Your Digital Ticket
+After booking, you get a premium digital ticket. It’s all integrated—you can add it to your calendar, share the invite with friends, or check your "CineGold" loyalty points in your profile.
+
+![Confirmation](./assets/screenshots/5.jpeg)
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Prerequisites
-Ensure you have the following API keys in your `.env` file:
-```env
-EXPO_PUBLIC_TRAKT_CLIENT_ID=your_id
-EXPO_PUBLIC_TRAKT_CLIENT_SECRET=your_secret
-EXPO_PUBLIC_YOUTUBE_API_KEY=your_key
-```
-
-### 2. Installation
-```bash
-npm install
-```
-
-### 3. Run the App
-```bash
-npx expo start
-```
+## 🛠️ How It's Built
+*   **Tech**: Built with Expo and React Native for a smooth, native feel.
+*   **Real-Time Data**: Powered by **Trakt.tv** for metadata, **TVmaze** for posters, and **YouTube** for trailers.
+*   **Design**: A custom "Maroon & Gold" theme that feels like a luxury cinema lobby.
 
 ---
 
-## 📸 Design Philosophy
-CineCurator follows a **Dark Cinematic** aesthetic, utilizing high-contrast typography, smooth transitions, and premium micro-interactions to create a luxury user experience.
+## 🚀 Setup
+1.  Add your Trakt and YouTube API keys to `.env`.
+2.  Run `npm install`.
+3.  Fire it up with `npx expo start`.
 
----
-*Built with ❤️ for Movie Lovers Everywhere.*
+*Happy watching!*
