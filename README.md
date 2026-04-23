@@ -70,5 +70,7 @@ Upon successful booking, a digital ticket is generated. Users can manage their r
 2.  Install dependencies: `npm install`
 3.  Launch the environment: `npx expo start`
 
+Note: "The app is fully integrated with Trakt and YouTube APIs. To see real-time trending data, simply add your own API keys to a .env file. Otherwise, the app will automatically run in Offline Demo Mode with pre-loaded mock data so you can still test all the features and UI."
+
 ---
 *Developed for the modern cinema enthusiast.*
