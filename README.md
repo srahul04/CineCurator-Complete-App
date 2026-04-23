@@ -1,37 +1,67 @@
-# CineCurator-FE
+# 🎬 CineCurator — The Ultimate Real-Time Movie Experience
 
-CineCurator is a premium movie ticket booking mobile application built with React Native and Expo. It features a high-fidelity UI/UX flow designed for a smooth and modern user experience.
+**CineCurator** is a high-fidelity, production-ready mobile application prototype built with **Expo** and **React Native**. It transforms the movie-going experience by integrating real-time global movie metadata, authentic cinematic posters, and live YouTube trailers into a premium, gold-standard UI.
 
-## Features
-- **City Selection**: Choose your location with featured city highlights.
-- **Movie Listing**: Filter movies by category (IMAX, Premiere, etc.) with staggered animations.
-- **Movie Details**: Full view with hero parallax, 7-day date selection, and showtime grids.
-- **Seat Booking**: Intuitive seat selection with row/column labeling and real-time summary.
-- **Booking Confirmation**: Premium digital ticket with QR barcode and large movie banner.
+---
 
-## Screenshots
-<p align="center">
-  <img src="assets/screenshots/0.jpeg" width="200" />
-  <img src="assets/screenshots/1.jpeg" width="200" />
-  <img src="assets/screenshots/2.jpeg" width="200" />
-</p>
-<p align="center">
-  <img src="assets/screenshots/3.1.jpeg" width="200" />
-  <img src="assets/screenshots/3.2.jpeg" width="200" />
-  <img src="assets/screenshots/4.jpeg" width="200" />
-  <img src="assets/screenshots/5.jpeg" width="200" />
-</p>
+## 🌟 Premium Features
 
-## Tech Stack
-- React Native & Expo SDK 54
-- Expo Router (File-based routing)
-- TypeScript (Strict type safety)
+### 🔐 Secure Auth-First Architecture
+*   **Gatekeeper Entry**: The app starts with a secure login flow, ensuring a membership-only feel.
+*   **Test Credentials**: 
+    *   **Email**: `test123@gmail.com`
+    *   **Password**: `test123`
 
-## How to Run
-1. Clone the repo: `git clone https://github.com/srahul04/CineCurator-FE.git`
-2. Install dependencies: `npm install`
-3. Start the project: `npx expo start`
-4. Open on **Expo Go** (Android/iOS) or an emulator.
+### 📡 Absolute Real-Time Ecosystem
+*   **Trakt.tv Metadata**: Real-time trending, popular, and anticipated movie data from global databases.
+*   **TVmaze Dynamic Posters**: Every movie banner is fetched live using an intelligent search system—no more stock placeholders.
+*   **YouTube Search Trailers**: Uses the **YouTube Data API v3** to search for and play official trailers instantly.
+*   **Live Mapping**: Automated categorization of movies into **IMAX**, **Premiere**, and **Indie** based on real-time metadata.
 
-## License
-MIT
+### 🛡️ Smart Navigation & UX
+*   **Navigation Guard**: A custom-built interceptor for back-gestures that prevents redundant history loops and provides a smart "Exit or Home" popup.
+*   **End-to-End Booking**: A seamless flow from city selection to seat booking, culminating in a dynamic digital ticket.
+*   **Upcoming Explorer**: A dedicated grid view for future blockbusters with live release tracking.
+
+### 💎 Loyalty & Social
+*   **CineGold System**: A branded, animated loyalty card with real-time stat tracking (Movies watched, upcoming bookings).
+*   **Native Sharing**: Invite friends to your movies directly via native OS share sheets.
+
+---
+
+## 🛠️ Technology Stack
+*   **Framework**: Expo (React Native)
+*   **Navigation**: Expo Router (File-based)
+*   **API Client**: Axios with interceptors for secure header management.
+*   **Services**: Trakt.tv API, YouTube Data API v3, TVmaze API.
+*   **Theme**: Custom Vanilla CSS Design System (Premium Maroon & Gold).
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+Ensure you have the following API keys in your `.env` file:
+```env
+EXPO_PUBLIC_TRAKT_CLIENT_ID=your_id
+EXPO_PUBLIC_TRAKT_CLIENT_SECRET=your_secret
+EXPO_PUBLIC_YOUTUBE_API_KEY=your_key
+```
+
+### 2. Installation
+```bash
+npm install
+```
+
+### 3. Run the App
+```bash
+npx expo start
+```
+
+---
+
+## 📸 Design Philosophy
+CineCurator follows a **Dark Cinematic** aesthetic, utilizing high-contrast typography, smooth transitions, and premium micro-interactions to create a luxury user experience.
+
+---
+*Built with ❤️ for Movie Lovers Everywhere.*
