@@ -9,6 +9,19 @@ CineCurator is a premium movie ticket booking mobile application built with Reac
 - **Seat Booking**: Intuitive seat selection with row/column labeling and real-time summary.
 - **Booking Confirmation**: Premium digital ticket with QR barcode and large movie banner.
 
+## Screenshots
+<p align="center">
+  <img src="assets/screenshots/0.jpeg" width="200" />
+  <img src="assets/screenshots/1.jpeg" width="200" />
+  <img src="assets/screenshots/2.jpeg" width="200" />
+</p>
+<p align="center">
+  <img src="assets/screenshots/3.1.jpeg" width="200" />
+  <img src="assets/screenshots/3.2.jpeg" width="200" />
+  <img src="assets/screenshots/4.jpeg" width="200" />
+  <img src="assets/screenshots/5.jpeg" width="200" />
+</p>
+
 ## Tech Stack
 - React Native & Expo SDK 54
 - Expo Router (File-based routing)
