@@ -13,7 +13,6 @@ CineCurator is a premium movie ticket booking mobile application built with Reac
 - React Native & Expo SDK 54
 - Expo Router (File-based routing)
 - TypeScript (Strict type safety)
-- Context API (State management)
 
 ## How to Run
 1. Clone the repo: `git clone https://github.com/srahul04/CineCurator-FE.git`
