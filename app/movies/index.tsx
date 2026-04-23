@@ -1,25 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useBooking } from '../../context/BookingContext';
 import MovieCard from '../../components/MovieCard';
 import FilterTab from '../../components/FilterTab';
-import { MOVIES } from '../../data/movies';
+import { MOVIES as MOCK_MOVIES } from '../../data/movies';
 import { MovieCategory, Movie } from '../../types';
 import { Colors, Spacing, FontSize } from '../../constants/theme';
+import { getTrendingMovies } from '../../services/trakt';
 
 export default function MovieListingScreen() {
   const [activeFilter, setActiveFilter] = useState<MovieCategory>('All Films');
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
   const { booking, setMovie } = useBooking();
+
+  // Smart Navigation Guard
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert('CineCurator', 'What would you like to do?', [
+          { text: 'Stay', style: 'cancel', onPress: () => null },
+          { text: 'Go to Menu', onPress: () => router.replace('/home') },
+          { text: 'Exit App', style: 'destructive', onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      };
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => subscription.remove();
+    }, [])
+  );
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const data = await getTrendingMovies();
+      setMovies(data.length > 0 ? data : MOCK_MOVIES);
+      setLoading(false);
+    };
+    fetchMovies();
+  }, []);
 
   const filters: MovieCategory[] = ['All Films', 'IMAX', 'Premiere', 'Indie'];
 
   const filteredMovies = activeFilter === 'All Films'
-    ? MOVIES
-    : MOVIES.filter(m => m.category === activeFilter);
+    ? movies
+    : movies.filter(m => m.category === activeFilter);
 
   const handleMovieTap = (movie: Movie) => {
     setMovie(movie);
@@ -60,19 +88,26 @@ export default function MovieListingScreen() {
         </ScrollView>
       </View>
 
-      <FlatList
-        data={filteredMovies}
-        keyExtractor={item => item.id}
-        renderItem={({ item, index }) => (
-          <MovieCard 
-            movie={item} 
-            onPress={() => handleMovieTap(item)} 
-            index={index}
-          />
-        )}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={Colors.accent} />
+          <Text style={{ marginTop: 10, color: Colors.textMuted, fontWeight: '600' }}>Fetching Trending Movies...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredMovies}
+          keyExtractor={item => item.id}
+          renderItem={({ item, index }) => (
+            <MovieCard 
+              movie={item} 
+              onPress={() => handleMovieTap(item)} 
+              index={index}
+            />
+          )}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       {/* Navigation Tab Bar */}
       <View style={styles.tabBar}>
@@ -82,15 +117,15 @@ export default function MovieListingScreen() {
           </View>
           <Text style={[styles.tabLabel, { color: Colors.accent }]}>MOVIES</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => router.push('/cinemas')} activeOpacity={0.7}>
           <Ionicons name="videocam-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>CINEMAS</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => router.push('/tickets')} activeOpacity={0.7}>
           <Ionicons name="ticket-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>TICKETS</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => router.push('/profile')} activeOpacity={0.7}>
           <Ionicons name="person-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>PROFILE</Text>
         </TouchableOpacity>

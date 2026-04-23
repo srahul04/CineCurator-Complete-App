@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, ImageBackground, ScrollView, Linking } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,16 +12,27 @@ import { Colors, Spacing, Radius, FontSize } from '../../constants/theme';
 
 export default function MovieDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const movie = MOVIES.find(m => m.id === id);
-
+  const { booking, setMovie, setShowtime } = useBooking();
+  
+  // Prioritize movie from context if IDs match, otherwise look in mock data
+  const movie = (booking.movie?.id === id) ? booking.movie : MOVIES.find(m => m.id === id);
+  
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const [selectedShowtime, setSelectedShowtime] = useState<string | null>(null);
   
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { setShowtime } = useBooking();
   const dates = getNextSevenDays();
 
-  if (!movie) return null;
+  if (!movie) {
+    return (
+      <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ color: Colors.textMuted }}>Movie details not found.</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 20 }}>
+          <Text style={{ color: Colors.accent }}>Go Back</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
 
   const handleSelectSeats = () => {
     if (!selectedShowtime) return;
@@ -83,6 +94,11 @@ export default function MovieDetailScreen() {
             <Text style={styles.dot}>•</Text>
             <Text style={styles.metaText}>{movie.duration}</Text>
           </View>
+          {movie.description && (
+            <Text style={styles.descriptionText} numberOfLines={4}>
+              {movie.description}
+            </Text>
+          )}
         </View>
 
         {/* Theater Card */}
@@ -121,35 +137,78 @@ export default function MovieDetailScreen() {
           />
         </View>
 
-        {/* Action Button */}
-        <TouchableOpacity
-          style={[styles.button, !selectedShowtime && styles.buttonDisabled]}
-          onPress={handleSelectSeats}
-          disabled={!selectedShowtime}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.buttonText}>Select Seats 🎭</Text>
-        </TouchableOpacity>
+        {/* Global Reviews Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>GLOBAL REVIEWS</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.reviewsScroll}>
+            {[1, 2].map((item) => (
+              <View key={item} style={styles.reviewCard}>
+                <View style={styles.reviewHeader}>
+                  <View style={styles.reviewUser}>
+                    <Text style={styles.reviewerName}>Reviewer {item}</Text>
+                    <Text style={styles.reviewDate}>2 days ago</Text>
+                  </View>
+                  <View style={styles.reviewRating}>
+                    <Ionicons name="star" size={12} color="#FFD700" />
+                    <Text style={styles.reviewRatingText}>9.0</Text>
+                  </View>
+                </View>
+                <Text style={styles.reviewText} numberOfLines={3}>
+                  "The cinematic experience in this movie is world-class! A must watch for every Kollywood fan. The visuals and BGM are stunning."
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Action Buttons */}
+        <View style={styles.actionRow}>
+          <TouchableOpacity
+            style={styles.trailerButton}
+            onPress={async () => {
+              const { getMovieTrailer } = require('../../services/youtube');
+              const url = await getMovieTrailer(movie.title);
+              if (url) {
+                Linking.openURL(url);
+              } else {
+                alert('Trailer not available for this movie.');
+              }
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="play-circle-outline" size={24} color={Colors.accent} />
+            <Text style={styles.trailerButtonText}>Watch Trailer</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, !selectedShowtime && styles.buttonDisabled]}
+            onPress={handleSelectSeats}
+            disabled={!selectedShowtime}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>Select Seats 🎭</Text>
+          </TouchableOpacity>
+        </View>
 
       </Animated.ScrollView>
 
       {/* Navigation Tab Bar */}
       <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7} onPress={() => router.push('/movies')}>
           <View style={styles.activeTabCircle}>
             <Ionicons name="film" size={24} color={Colors.white} />
           </View>
           <Text style={[styles.tabLabel, { color: Colors.accent }]}>MOVIES</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7} onPress={() => router.push('/cinemas')}>
           <Ionicons name="videocam-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>CINEMAS</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7} onPress={() => router.push('/tickets')}>
           <Ionicons name="ticket-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>TICKETS</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.tabItem} activeOpacity={0.7} onPress={() => router.push('/profile')}>
           <Ionicons name="person-outline" size={24} color={Colors.textMuted} />
           <Text style={styles.tabLabel}>PROFILE</Text>
         </TouchableOpacity>
@@ -212,6 +271,12 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sm,
     fontWeight: '600',
   },
+  descriptionText: {
+    color: Colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 20,
+    marginTop: Spacing.md,
+  },
   dot: {
     color: Colors.textMuted,
   },
@@ -266,13 +331,88 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     marginBottom: Spacing.sm,
   },
+  reviewsScroll: {
+    paddingRight: Spacing.md,
+  },
+  reviewCard: {
+    width: 280,
+    backgroundColor: Colors.white,
+    padding: Spacing.md,
+    borderRadius: Radius.lg,
+    marginRight: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  reviewUser: {
+    flex: 1,
+  },
+  reviewerName: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  reviewDate: {
+    fontSize: 10,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  reviewRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FFF9E5',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+  },
+  reviewRatingText: {
+    fontSize: 10,
+    fontWeight: '900',
+    color: '#B8860B',
+  },
+  reviewText: {
+    fontSize: 12,
+    color: Colors.textSecondary,
+    lineHeight: 18,
+    fontStyle: 'italic',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    gap: Spacing.md,
+    marginTop: Spacing.sm,
+  },
+  trailerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: Colors.accent,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    borderRadius: Radius.pill,
+    gap: 8,
+    flex: 1,
+  },
+  trailerButtonText: {
+    color: Colors.accent,
+    fontSize: FontSize.md,
+    fontWeight: '800',
+  },
   button: {
     backgroundColor: Colors.accent,
-    marginHorizontal: Spacing.md,
+    flex: 1,
     paddingVertical: Spacing.md,
     borderRadius: Radius.pill,
     alignItems: 'center',
-    marginTop: Spacing.sm,
   },
   buttonDisabled: {
     backgroundColor: Colors.border,

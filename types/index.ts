@@ -18,10 +18,11 @@ export interface Movie {
   title: string;
   genre: string;
   duration: string;
-  rating: number;
-  category: MovieCategory;
+  rating: number | string;
+  category: string;
+  description?: string;
   isNew?: boolean;
-  posterColor: string;
+  posterColor?: string;
   posterUrl?: string;
 }
 

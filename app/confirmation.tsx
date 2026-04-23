@@ -109,6 +109,31 @@ export default function BookingConfirmationScreen() {
           </View>
         </View>
 
+        {/* Trending: Social Sharing & Actions */}
+        <View style={styles.socialRow}>
+          <TouchableOpacity 
+            style={styles.socialButton}
+            onPress={async () => {
+              const { Share } = require('react-native');
+              try {
+                await Share.share({
+                  message: `I just booked tickets for ${booking.movie?.title}! 🍿\nJoin me at ${booking.city} for the ${booking.showtime} show!`,
+                });
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          >
+            <Ionicons name="share-social-outline" size={20} color={Colors.accent} />
+            <Text style={styles.socialButtonText}>Invite Friends</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.socialButton}>
+            <Ionicons name="calendar-outline" size={20} color={Colors.accent} />
+            <Text style={styles.socialButtonText}>Add to Calendar</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Actions */}
         <View style={styles.actionsContainer}>
           <TouchableOpacity style={styles.primaryButton} onPress={handleDone} activeOpacity={0.8}>
@@ -307,6 +332,29 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     letterSpacing: 1,
     marginTop: Spacing.md,
+  },
+  socialRow: {
+    flexDirection: 'row',
+    width: '100%',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  socialButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    paddingVertical: 12,
+    borderRadius: Radius.md,
+    borderWidth: 1.5,
+    borderColor: Colors.accentFaded,
+    gap: 8,
+  },
+  socialButtonText: {
+    color: Colors.accent,
+    fontSize: 12,
+    fontWeight: '800',
   },
   actionsContainer: {
     width: '100%',
